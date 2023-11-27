@@ -14,9 +14,11 @@ Al utilizar tasas en lugar de cifras absolutas se pueden hacer comparaciones má
 
 ![Tasas de homicidios en México por entidad](./imgs/1.png)
 
-Existen 3 conjuntos de datos en este repositorio:
+Existen 4 conjuntos de datos en este repositorio:
 
 * poblacion_entidad: Son las cifras de población general de hombres, mujeres y total de 1970 a 2070 por entidad federativa.
+
+* poblacion_adulta_entidad: Similar al anterior, la diferencia es que en estos datos solo se contempla la población de 18 años o más.
 
 * poblacion_edad: Son las cifras de población de hombres, mujeres y total por edad, de 0 a 109 años. Estas cifras son de la población de México de 1950 a 2070.
 
@@ -36,7 +38,7 @@ El proceso fue iterar por sexo, luego iterar por entidad federativa/edad/grupo d
 
 Al final del proceso tendremos archivos `.csv` que nos permiten generar gráficas como la siguiente.
 
-![Población estimada de México](./imgs/2.png)
+![Tasa de suicidios anuales en México](./imgs/2.png)
 
 Hay múltiples formas de utilizar estos archivos, depende de la herramienta que se utilice. A continuación compartiré un ejemplo de como usarlos en `pandas`.
 
@@ -89,7 +91,7 @@ df["tasa"] = df["total"] / df["pop"] * 100000
 
 Al imprimir este nuevo `DataFrame` nos mostrará el siguiente resultado.
 
-|      |     Total |         pop |   tasa |
+|      |     total |         pop |   tasa |
 |-----:|----------:|------------:|-------:|
 | 2013 |   623,599 | 119,597,654 |    521 |
 | 2014 |   633,641 | 121,048,604 |    523 |
@@ -148,6 +150,25 @@ Fuente: https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2023/NR/NR202
 
 Similar al ejemplo anterior, la diferencia comienza a partir del año 2020.
 
+### Tasa de matrimonios por cada 1,000 habitantes de 18 años o más de edad
+
+|      |     Total |   INEGI |   🧁 |   Diferencia |
+|-----:|----------:|--------:|----:|-------------:|
+| 2013 | 583,246 |     7.5 | 7.5 |          0.0 |
+| 2014 | 577,713 |     7.2 | 7.2 |          0.0 |
+| 2015 | 558,022 |     6.9 | 6.9 |          0.0 |
+| 2016 | 543,749 |     6.6 | 6.6 |          0.0 |
+| 2017 | 528,678 |     3.3 | 6.3 |          3.0 |
+| 2018 | 501,298 |     5.9 | 5.9 |          0.0 |
+| 2019 | 504,923 |     5.8 | 5.8 |          0.0 |
+| 2020 | 335,563 |     3.8 | 3.8 |          0.0 |
+| 2021 | 453,085 |     5.1 | 5.1 |          0.0 |
+| 2022 | 507,052 |     5.7 | 5.6 |         -0.1 |
+
+Fuente: https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2023/EstMat/Matrimonios2022.pdf
+
+En este caso solamente el 2022 presentó una diferencia marginal. Para calcular esta tasa se utilizaron los datos del directorio `poblacion_adulta_entidad`.
+
 ### Tasa bruta de suicidios por cada 100k habitantes
 
 |      |    Total |   INEGI |    🧁 |   Diferencia |
@@ -171,6 +192,8 @@ Tampoco están disponibles a nivel municipal. Para este caso recomiendo utilizar
 
 ## Conclusión
 
-A pesar de las ligeras diferencias entre las estimaciones del CONAPO y el INEGI, recomiendo utilizar estas estimaciones para calcular las tasas demográficas.
+A pesar de las ligeras diferencias entre las estimaciones del CONAPO y el INEGI, recomiendo utilizar las estimaciones de este proyecto para calcular las tasas demográficas y otros análisis.
 
-Estaré monitoreand cambios en el archivo de CONAPO y actualizaré los conjuntos de datos de manera oportuna.
+Estaré monitoreand cambios en el archivo del CONAPO y actualizaré los conjuntos de datos de manera oportuna.
+
+![Población estimada de México](./imgs/3.png)
