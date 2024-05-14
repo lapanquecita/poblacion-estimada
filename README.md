@@ -1,12 +1,16 @@
 # Población estimada de México
 
-En este repositorio se encuentran el script y dataset para extraer la población estimada de México de 1950 a 2070.
+En este repositorio se encuentran el script y datasets para extraer la población estimada de México de 1950 a 2070.
 
-El dataset corresponde a la estimación del CONAPO, la cual contiene registros por año, edad, sexo y entidad federativa.
+Los datasets corresponden a la estimación del CONAPO, los cuales contienen registros por año, edad, sexo, entidad federativa y municipio.
 
-El dataset fue obtenido de la siguiente direccción (Población a mitad de año, 1950-2070):
+El dataset por entidades federativas fue obtenido de la siguiente direccción (Población a mitad de año, 1950-2070):
 
 https://datos.gob.mx/busca/dataset/proyecciones-de-la-poblacion-de-mexico-y-de-las-entidades-federativas-2020-2070
+
+El dataset de municipios se puede encontrar al navegar por el siguiente archivo PDF del CONAPO:
+
+https://www.gob.mx/cms/uploads/attachment/file/915066/BD_municipales_portada_regiones.pdf
 
 Estos estimados se utilizan para calcular tasas demográficas, como la de mortalidad, natalidad, nupcialidad, etc.
 
@@ -14,27 +18,27 @@ Al utilizar tasas en lugar de cifras absolutas se pueden hacer comparaciones má
 
 ![Tasas de homicidios en México por entidad](./imgs/1.png)
 
-Existen 4 conjuntos de datos en este repositorio:
+Existen 5 conjuntos de datos en este repositorio:
 
 * poblacion_entidad: Son las cifras de población general de hombres, mujeres y total de 1970 a 2070 por entidad federativa.
 
+* poblacion_municipal: Son las cifras de población general de hombres, mujeres y total de 1990 a 2040 por municipio.
+
 * poblacion_adulta_entidad: Similar al anterior, la diferencia es que en estos datos solo se contempla la población de 18 años o más.
 
-* poblacion_edad: Son las cifras de población de hombres, mujeres y total por edad, de 0 a 109 años. Estas cifras son de la población de México de 1950 a 2070.
+* poblacion_edad_nacional: Son las cifras de población de hombres, mujeres y total por edad, de 0 a 109 años. Estas cifras son de la población de México de 1950 a 2070.
 
 * poblacion_quinquenal: Esta es muy similar a la anterior, la diferencia es que las edades se encuentran agrupadas en rangos de 5 años.
 
-El primer conjunto cubre de los años 1970 a 2070 y los otros dos de 1950 a 2070. La razón de esto es que la información por entidad comienza en 1970 y se queria evitar problemas de ambigüedad.
-
 ## Procesamiento y uso
 
-El dataset que proporciona el CONAPO contiene un poco más de 737 mil registros. Procesarlos todos para cada consulta puede tomar bastante tiempo.
+Los datasets que proporciona el CONAPO contienen cientos de miles de registros. Procesarlos todos para cada consulta puede alentar nuestro ritmo de trabajo.
 
 El objetivo de este repositorio es transformar estos registros en formatos resumidos y de fácil uso. Esto se logró utilizando la librería `pandas`.
 
 En el archivo `script.py` se ha documentado cada línea de código para generar los nuevos conjuntos de datos.
 
-El proceso fue iterar por sexo, luego iterar por entidad federativa/edad/grupo de edad y hacer agrupaciones.
+El proceso fue iterar por sexo, luego iterar por entidad federativa/municipio/edad/grupo de edad y hacer agrupaciones.
 
 Al final del proceso tendremos archivos `.csv` que nos permiten generar gráficas como la siguiente.
 
@@ -184,16 +188,18 @@ Fuente: https://www.inegi.org.mx/contenidos/saladeprensa/aproposito/2023/EAP_Sui
 
 En este caso no existe ninguna diferencia entre las tasas del INEGI y las que calculamos.
 
-## Limitaciones
+## Población municipal
 
-Como fue mencionado anteriormente, estas estimaciones no están disponibles a nivel estatal para los años 1950-1969.
+Con una estrategia similar a la utilizada en la extracción de cifras por entidad, es posible tener la población estimada por municipio desde el año 1990 hasta el año 2040.
 
-Tampoco están disponibles a nivel municipal. Para este caso recomiendo utilizar los resultados del censo de población más cercanos al año deseado.
+Tener las cifras de población por municipio nos permite desarrollar mapas con mayor precisión.
+
+![Mapa dengue](./imgs/3.png)
 
 ## Conclusión
 
 A pesar de las ligeras diferencias entre las estimaciones del CONAPO y el INEGI, recomiendo utilizar las estimaciones de este proyecto para calcular las tasas demográficas y otros análisis.
 
-Estaré monitoreand cambios en el archivo del CONAPO y actualizaré los conjuntos de datos de manera oportuna.
+Estaré monitoreando cambios en los archivos del CONAPO y actualizaré los conjuntos de datos de manera oportuna.
 
-![Población estimada de México](./imgs/3.png)
+![Población estimada de México](./imgs/4.png)

@@ -1,13 +1,15 @@
 """
 
-Fuente:
+Fuentes:
+
 https://datos.gob.mx/busca/dataset/proyecciones-de-la-poblacion-de-mexico-y-de-las-entidades-federativas-2020-2070
+
+https://www.gob.mx/cms/uploads/attachment/file/915066/BD_municipales_portada_regiones.pdf
 
 Enlace directo:
 https://conapo.segob.gob.mx/work/models/CONAPO/Datos_Abiertos/pry23/00_Pob_Mitad_1950_2070.csv
 
 """
-
 
 import os
 import pandas as pd
@@ -15,23 +17,37 @@ import pandas as pd
 
 SEXO = ["Hombres", "Mujeres", "Total"]
 
-QUINQUENALES = [
-    (0, 4), (5, 9), (10, 14), (15, 19),
-    (20, 24), (25, 29), (30, 34), (35, 39),
-    (40, 44), (45, 49), (50, 54), (55, 59),
-    (60, 64), (65, 69), (70, 74), (75, 79),
-    (80, 84), (85, 89), (90, 94), (95, 99),
+QUINQUENAL_ESTATAL = [
+    (0, 4),
+    (5, 9),
+    (10, 14),
+    (15, 19),
+    (20, 24),
+    (25, 29),
+    (30, 34),
+    (35, 39),
+    (40, 44),
+    (45, 49),
+    (50, 54),
+    (55, 59),
+    (60, 64),
+    (65, 69),
+    (70, 74),
+    (75, 79),
+    (80, 84),
+    (85, 89),
+    (90, 94),
+    (95, 99),
     (100, 120),
 ]
 
 
 def poblacion_general_entidad():
-
     # Creamos el directorio para la población general por entidad.
     os.makedirs("./poblacion_entidad", exist_ok=True)
 
-    # Cargamos el dataset del CONAPO.
-    df = pd.read_csv("./CONAPO.csv")
+    # Cargamos el dataset del CONAPO por entidad.
+    df = pd.read_csv("./data/estatal.csv")
 
     # Filtramos los registros para solo tomar de 1970 en adelante.
     # Las estimaciones estatales comienzan a partir de ese año.
@@ -39,7 +55,6 @@ def poblacion_general_entidad():
 
     # Iteramos por hombres, mujeres y total.
     for s in SEXO:
-
         data = list()
 
         # Si la iteración corresponde a 'Total' no realizamos filtrado.
@@ -50,7 +65,6 @@ def poblacion_general_entidad():
 
         # Iteramos por entidad federativa.
         for e in temp_df["ENTIDAD"].unique():
-
             # Filtramos por la entidad federativa.
             sub_temp_df = temp_df[temp_df["ENTIDAD"] == e]
 
@@ -61,20 +75,21 @@ def poblacion_general_entidad():
             # En el caso de los registros de la República Mexicana los renombramos a '0'
             # para que salga primero en la lista.
             for k, v in sub_temp_df.items():
-                data.append({
-                    "Año": k,
-                    "Población": v,
-                    "Entidad": "0" if e == "República Mexicana" else e,
-                })
+                data.append(
+                    {
+                        "Año": k,
+                        "Población": v,
+                        "Entidad": "0" if e == "República Mexicana" else e,
+                    }
+                )
         # Creamos el DataFrame con todos los registros por entidad y año.
         final = pd.DataFrame.from_records(data)
 
         # Reorganizamos el DataFrame para que el índice sea la entidad
         # y las columnas sean los años.
-        final = final.pivot_table(
-            index="Entidad", columns="Año", values="Población")
+        final = final.pivot_table(index="Entidad", columns="Año", values="Población")
 
-        # Renombarmos de nuevo la República Mexicana.
+        # Renombramos de nuevo la República Mexicana.
         final.index = final.index.str.replace("0", "Estados Unidos Mexicanos")
 
         # Convertimos de floats a ints.
@@ -85,12 +100,11 @@ def poblacion_general_entidad():
 
 
 def poblacion_adulta_entidad():
-
     # Creamos el directorio para la población adulta por entidad.
     os.makedirs("./poblacion_adulta_entidad", exist_ok=True)
 
-    # Cargamos el dataset del CONAPO.
-    df = pd.read_csv("./CONAPO.csv")
+    # Cargamos el dataset del CONAPO por entidad.
+    df = pd.read_csv("./data/estatal.csv")
 
     # Filtramos los registros para solo considerar la población de 18 años o más.
     df = df[df["EDAD"] >= 18]
@@ -101,7 +115,6 @@ def poblacion_adulta_entidad():
 
     # Iteramos por hombres, mujeres y total.
     for s in SEXO:
-
         data = list()
 
         # Si la iteración corresponde a 'Total' no realizamos filtrado.
@@ -112,7 +125,6 @@ def poblacion_adulta_entidad():
 
         # Iteramos por entidad federativa.
         for e in temp_df["ENTIDAD"].unique():
-
             # Filtramos por la entidad federativa.
             sub_temp_df = temp_df[temp_df["ENTIDAD"] == e]
 
@@ -123,20 +135,21 @@ def poblacion_adulta_entidad():
             # En el caso de los registros de la República Mexicana los renombramos a '0'
             # para que salga primero en la lista.
             for k, v in sub_temp_df.items():
-                data.append({
-                    "Año": k,
-                    "Población": v,
-                    "Entidad": "0" if e == "República Mexicana" else e,
-                })
+                data.append(
+                    {
+                        "Año": k,
+                        "Población": v,
+                        "Entidad": "0" if e == "República Mexicana" else e,
+                    }
+                )
         # Creamos el DataFrame con todos los registros por entidad y año.
         final = pd.DataFrame.from_records(data)
 
         # Reorganizamos el DataFrame para que el índice sea la entidad
         # y las columnas sean los años.
-        final = final.pivot_table(
-            index="Entidad", columns="Año", values="Población")
+        final = final.pivot_table(index="Entidad", columns="Año", values="Población")
 
-        # Renombarmos de nuevo la República Mexicana.
+        # Renombramos de nuevo la República Mexicana.
         final.index = final.index.str.replace("0", "Estados Unidos Mexicanos")
 
         # Convertimos de floats a ints.
@@ -147,19 +160,17 @@ def poblacion_adulta_entidad():
 
 
 def poblacion_por_edad():
-
     # Creamos el directorio para la población por edad a nivel nacional.
-    os.makedirs("./poblacion_edad", exist_ok=True)
+    os.makedirs("./poblacion_edad_nacional", exist_ok=True)
 
-    # Cargamos el dataset del CONAPO.
-    df = pd.read_csv("./CONAPO.csv")
+    # Cargamos el dataset del CONAPO por entidad.
+    df = pd.read_csv("./data/estatal.csv")
 
     # Seleccionamos solo los datos de la República Mexicana.
     df = df[df["ENTIDAD"] == "República Mexicana"]
 
     # Iteramos por hombres, mujeres y total.
     for s in SEXO:
-
         # Si la iteración corresponde a 'Total' no realizamos filtrado.
         if s != "Total":
             temp_df = df[df["SEXO"] == s]
@@ -169,29 +180,28 @@ def poblacion_por_edad():
         # Reorganizamos el DataFrame para que el índice sea la edad
         # y las columnas sean los años.
         temp_df = temp_df.pivot_table(
-            index="EDAD", columns="AÑO", values="POBLACION", aggfunc="sum")
+            index="EDAD", columns="AÑO", values="POBLACION", aggfunc="sum"
+        )
 
         # Renombramos el índice.
         temp_df.index.name = "Edad"
 
         # Guardamos el archivo final.
-        temp_df.to_csv(f"./poblacion_edad/{s.lower()}.csv")
+        temp_df.to_csv(f"./poblacion_edad_nacional/{s.lower()}.csv")
 
 
 def poblacion_edad_quinquenal():
-
     # Creamos el directorio para la población por grupo de edad quinquenal a nivel nacional.
-    os.makedirs("./poblacion_quinquenal", exist_ok=True)
+    os.makedirs("./poblacion_quinquenal_nacional", exist_ok=True)
 
-    # Cargamos el dataset del CONAPO.
-    df = pd.read_csv("./CONAPO.csv")
+    # Cargamos el dataset del CONAPO por entidad.
+    df = pd.read_csv("./data/estatal.csv")
 
     # Seleccionamos solo los datos de la República Mexicana.
     df = df[df["ENTIDAD"] == "República Mexicana"]
 
     # Iteramos por hombres, mujeres y total.
     for s in SEXO:
-
         data = list()
 
         # Si la iteración corresponde a 'Total' no realizamos filtrado.
@@ -201,8 +211,7 @@ def poblacion_edad_quinquenal():
             temp_df = df
 
         # Iteramos sobre los grupos quinquenales.
-        for i, (a, b) in enumerate(QUINQUENALES):
-
+        for i, (a, b) in enumerate(QUINQUENAL_ESTATAL):
             # Filtramos por grupo quinquenal, las edades que se encuentre
             # entre 'a' y 'b' de forma inclusiva.
             sub_temp_df = temp_df[temp_df["EDAD"].between(a, b)]
@@ -212,23 +221,25 @@ def poblacion_edad_quinquenal():
 
             # Iteramos por cada año y agregamos un diccionario a nuestra lista de datos.
             for k, v in sub_temp_df.items():
-                data.append({
-                    "Año": k,
-                    "Población": v,
-                    "Edad": i,
-                })
+                data.append(
+                    {
+                        "Año": k,
+                        "Población": v,
+                        "Edad": i,
+                    }
+                )
 
         # Creamos el DataFrame con todos los registros por edad y año.
         final = pd.DataFrame.from_records(data)
 
         # Reorganizamos el DataFrame para que el índice sea el grupo de edad
         # y las columnas sean los años.
-        final = final.pivot_table(
-            index="Edad", columns="Año", values="Población")
+        final = final.pivot_table(index="Edad", columns="Año", values="Población")
 
         # Ajustamos el índice para que indique los rangos de edad de cada grupo.
         final.index = final.index.map(
-            lambda x: f"{QUINQUENALES[x][0]}-{QUINQUENALES[x][1]}")
+            lambda x: f"{QUINQUENAL_ESTATAL[x][0]}-{QUINQUENAL_ESTATAL[x][1]}"
+        )
 
         # Renombramos el grupo de 100-120 a 100 y más.
         final.index = final.index.str.replace("100-120", "≥100")
@@ -240,12 +251,78 @@ def poblacion_edad_quinquenal():
         final.index.name = "Grupo edad"
 
         # Guardamos el archivo final.
-        final.to_csv(f"./poblacion_quinquenal/{s.lower()}.csv")
+        final.to_csv(f"./poblacion_quinquenal_nacional/{s.lower()}.csv")
+
+
+def poblacion_general_municipal():
+    # Creamos el directorio para la población general por municipio.
+    os.makedirs("./poblacion_municipal", exist_ok=True)
+
+    # Cargamos el dataset del CONAPO por municipio.
+    df = pd.read_csv("./data/municipal_quinquenal.csv")
+
+    # Convertimos la clave str y lo normlizamos a 5 dígitos.
+    df["CLAVE"] = df["CLAVE"].astype(str).str.zfill(5)
+
+    # Guardamos una referencia de los nombres de los municipios.
+    nombres = df.groupby("CLAVE").last()[["NOM_ENT", "NOM_MUN"]]
+
+    # Renombramos las columnas.
+    nombres.columns = ["Entidad", "Municipio"]
+
+    # Iteramos por hombres, mujeres y total.
+    for s in SEXO:
+        data = list()
+
+        # Si la iteración corresponde a 'Total' no realizamos filtrado.
+        if s != "Total":
+            temp_df = df[df["SEXO"] == s.upper()]
+        else:
+            temp_df = df
+
+        # Iteramos por municipio.
+        for m in temp_df["CLAVE"].unique():
+            # Filtramos por el municipio.
+            sub_temp_df = temp_df[temp_df["CLAVE"] == m]
+
+            # Agrupamos por año, sumamos y seleccionamos la población.
+            sub_temp_df = sub_temp_df.groupby("AÑO").sum()["POB_TOTAL"]
+
+            # Iteramos por cada año y agregamos un diccionario a nuestra lista de datos.
+            for k, v in sub_temp_df.items():
+                data.append(
+                    {
+                        "Año": k,
+                        "Población": v,
+                        "CVE": m,
+                    }
+                )
+        # Creamos el DataFrame con todos los registros por municipio y año.
+        municipios = pd.DataFrame.from_records(data)
+
+        # Reorganizamos el DataFrame para que el índice sea la clave del municipio.
+        # y las columnas sean los años.
+        municipios = municipios.pivot_table(
+            index="CVE", columns="Año", values="Población"
+        )
+
+        # Convertimos de floats a ints.
+        municipios = municipios.astype(int)
+
+        # Unimos ambos DataFrames.
+        final = pd.concat([nombres, municipios], axis=1)
+
+        # Renombramos el índice.
+        final.index.name = "CVE"
+
+        # Guardamos el archivo final.
+        final.to_csv(f"./poblacion_municipal/{s.lower()}.csv")
 
 
 if __name__ == "__main__":
-
     poblacion_general_entidad()
     poblacion_adulta_entidad()
     poblacion_por_edad()
     poblacion_edad_quinquenal()
+
+    poblacion_general_municipal()
