@@ -6,7 +6,7 @@ Los datasets corresponden a la estimación del CONAPO, los cuales contienen regi
 
 El dataset por entidades federativas fue obtenido de la siguiente direccción (Población a mitad de año, 1950-2070):
 
-https://datos.gob.mx/busca/dataset/proyecciones-de-la-poblacion-de-mexico-y-de-las-entidades-federativas-2020-2070
+https://www.datos.gob.mx/dataset/proyecciones-de-poblacion/resource/de522924-f4d8-4523-a6fd-6b2efe73f3af
 
 El dataset de municipios se puede encontrar al navegar por el siguiente archivo PDF del CONAPO:
 
