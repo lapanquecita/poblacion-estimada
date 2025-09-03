@@ -69,8 +69,8 @@ Primero vamos a cargar el dataset de estimación de población total por entidad
 # Es importante definir la primera columna como el índice.
 pop = pd.read_csv("./poblacion_entidad/total.csv", index_col=0)
 
-# Seleccionamos la primera fila, la cual corresponde a la República Mexicana.
-pop = pop.iloc[0]
+# Sumamos la población de todos los estados por año.
+pop = pop.sum(axis=0)
 
 # El nuevo índice son cadenas, hay que convertirlas a ints.
 pop.index = pop.index.astype(int)
@@ -203,3 +203,4 @@ A pesar de las ligeras diferencias entre las estimaciones del CONAPO y el INEGI,
 Estaré monitoreando cambios en los archivos del CONAPO y actualizaré los conjuntos de datos de manera oportuna.
 
 ![Población estimada de México](./imgs/4.png)
+
